@@ -23,6 +23,7 @@ Scenario: Registered eligible customers spending £100 or more get the discount
 When John spends 100
 Then John's total will be 90
 
-Scenario: Unregistered customers spending less that £100 get no discount
+Scenario: Unregistered customers spending less than £100 get no discount
 When Hannah spends 30
 Then Hannah's total will be 30
+

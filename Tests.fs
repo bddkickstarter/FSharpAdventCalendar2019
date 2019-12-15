@@ -111,7 +111,7 @@ let t4 =
 let t5 =
     let scenario = 
         DiscountCalculatorFeature
-            .``Unregistered customers spending less that _100 get no discount``
+            .``Unregistered customers spending less than _100 get no discount``
     
     test scenario.Name {
         //Act
@@ -127,3 +127,5 @@ let t5 =
 
         Expect.equal actual expected (sprintf "Expected %f got %f" expected actual)
     }
+
+    
