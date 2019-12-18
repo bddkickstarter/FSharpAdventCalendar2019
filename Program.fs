@@ -1,19 +1,14 @@
 ﻿open Features 
 open Expecto
+open FSharp.Data.Gherkin.Validation
 
 [<EntryPoint>]
 let main argv = 
     match runTestsInAssembly defaultConfig argv with
     | result when result <> 0 -> result
     | _ ->
-        DiscountCalculatorFeatureInstance.Background.Steps 
-        |> Seq.iter(fun s -> 
-            if not s.Visited then failwithf "Background Step %i not visited" s.Order else ())
-
-        DiscountCalculatorFeatureInstance.Scenarios
-        |> Seq.iter(fun s ->
-            if not s.Visited then failwithf "Scenario %s not visted" s.Name else ()
-            s.Steps
-            |> Seq.iter(fun st -> 
-                if not st.Visited then failwithf "Scenario %s Step %i not visited" s.Name st.Order else ()))
-        0
+        match FeatureValidator.Validate DiscountCalculatorFeatureInstance with
+        | None -> 0
+        | Some report -> 
+            printf "%s" report.Summary
+            0

@@ -4,6 +4,7 @@ open Features
 open Expecto
 open DiscountCalculation
 open DiscountCalculation.Impl
+open FSharp.Data.Gherkin.Builders
 
 let mockGetRegisteredCustomer  =
     let customers =
@@ -128,4 +129,25 @@ let t5 =
         Expect.equal actual expected (sprintf "Expected %f got %f" expected actual)
     }
 
-    
+[<Tests>]
+let t7 = 
+    ScenarioOutline(
+        DiscountCalculatorFeatureInstance
+            .``All of the scenarios as an outline``) {
+    return! 
+        fun scenario ->
+             test scenario.Name {
+                //Act
+                let actual = 
+                    scenario.``0 When _Customer Id_ spends _Spend_``.Text
+                    |> getCustomerIdAndSpendAmount
+                    |> getDiscountedTotal
+
+                //Assert
+                let expected =
+                    scenario.``1 Then their total will be _Total_``.Text
+                    |> getFirstNumber
+
+                Expect.equal actual expected (sprintf "Expected %f got %f" expected actual)}
+
+    } >>= testList

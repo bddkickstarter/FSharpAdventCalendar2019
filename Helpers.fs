@@ -14,3 +14,5 @@ let getFirstWord str =
 
 let getCustomerIdAndSpendAmount (str:string) =
     getFirstWord str,getFirstNumber str
+
+let (>>=) (name,tests) tl = tl name tests
