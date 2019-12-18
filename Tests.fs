@@ -7,7 +7,7 @@ open DiscountCalculation.Impl
 
 let mockGetRegisteredCustomer  =
     let customers =
-        DiscountCalculatorFeature.Background
+        DiscountCalculatorFeatureInstance.Background
             .``0 Given the following registered Customers``.Argument 
             |> Seq.map(fun c->
                 {
@@ -26,7 +26,7 @@ let getDiscountedTotal (customerId,spend) =
 [<Tests>]
 let t1 =
     let scenario = 
-        DiscountCalculatorFeature
+        DiscountCalculatorFeatureInstance
             .``Registered eligible customers spending less than _100 get no discount``
     
     test scenario.Name {
@@ -47,7 +47,7 @@ let t1 =
 [<Tests>]
 let t2 =
     let scenario = 
-        DiscountCalculatorFeature
+        DiscountCalculatorFeatureInstance
             .``Registered ineligible customers spending _100 or more get no discount``
     
     test scenario.Name {
@@ -68,7 +68,7 @@ let t2 =
 [<Tests>]
 let t3 =
     let scenario = 
-        DiscountCalculatorFeature
+        DiscountCalculatorFeatureInstance
             .``Unregistered customers spending _100 or more get no discount``
     
     test scenario.Name {
@@ -89,7 +89,7 @@ let t3 =
 [<Tests>]
 let t4 =
     let scenario = 
-        DiscountCalculatorFeature
+        DiscountCalculatorFeatureInstance
             .``Registered eligible customers spending _100 or more get the discount``
     
     test scenario.Name {
@@ -110,7 +110,7 @@ let t4 =
 [<Tests>]
 let t5 =
     let scenario = 
-        DiscountCalculatorFeature
+        DiscountCalculatorFeatureInstance
             .``Unregistered customers spending less than _100 get no discount``
     
     test scenario.Name {

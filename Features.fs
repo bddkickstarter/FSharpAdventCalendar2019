@@ -5,4 +5,4 @@ open FSharp.Data.Gherkin
 type DiscountCalculatorFeature = 
     GherkinProvider<const(__SOURCE_DIRECTORY__ + "./DiscountCalculation.feature"),Sanitize="partial">
     
-let DiscountCalculatorFeature = DiscountCalculatorFeature.CreateFeature()
+let DiscountCalculatorFeatureInstance = DiscountCalculatorFeature.CreateFeature()
