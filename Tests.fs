@@ -4,11 +4,11 @@ open Features
 open Expecto
 open DiscountCalculation
 open DiscountCalculation.Impl
-open FSharp.Data.Gherkin.Builders
+open FSharp.Data.Gherkin
 
 let mockGetRegisteredCustomer  =
     let customers =
-        DiscountCalculatorFeatureInstance.Background
+        DiscountCalculatorFeature.Background
             .``0 Given the following registered Customers``.Argument 
             |> Seq.map(fun c->
                 {
@@ -27,7 +27,7 @@ let getDiscountedTotal (customerId,spend) =
 [<Tests>]
 let t1 =
     let scenario = 
-        DiscountCalculatorFeatureInstance
+        DiscountCalculatorFeature.Scenarios
             .``Registered eligible customers spending less than _100 get no discount``
     
     test scenario.Name {
@@ -48,7 +48,7 @@ let t1 =
 [<Tests>]
 let t2 =
     let scenario = 
-        DiscountCalculatorFeatureInstance
+        DiscountCalculatorFeature.Scenarios
             .``Registered ineligible customers spending _100 or more get no discount``
     
     test scenario.Name {
@@ -69,7 +69,7 @@ let t2 =
 [<Tests>]
 let t3 =
     let scenario = 
-        DiscountCalculatorFeatureInstance
+        DiscountCalculatorFeature.Scenarios
             .``Unregistered customers spending _100 or more get no discount``
     
     test scenario.Name {
@@ -90,7 +90,7 @@ let t3 =
 [<Tests>]
 let t4 =
     let scenario = 
-        DiscountCalculatorFeatureInstance
+        DiscountCalculatorFeature.Scenarios
             .``Registered eligible customers spending _100 or more get the discount``
     
     test scenario.Name {
@@ -111,13 +111,13 @@ let t4 =
 [<Tests>]
 let t5 =
     let scenario = 
-        DiscountCalculatorFeatureInstance
+        DiscountCalculatorFeature.Scenarios
             .``Unregistered customers spending less than _100 get no discount``
     
     test scenario.Name {
         //Act
         let actual = 
-            scenario.``0 When Hannah spends 30`` .Text
+            scenario.``0 When Hannah spends 30``.Text
             |> getCustomerIdAndSpendAmount
             |> getDiscountedTotal
 
@@ -131,23 +131,23 @@ let t5 =
 
 [<Tests>]
 let t7 = 
-    ScenarioOutline(
-        DiscountCalculatorFeatureInstance
-            .``All of the scenarios as an outline``) {
-    return! 
-        fun scenario ->
-             test scenario.Name {
-                //Act
-                let actual = 
-                    scenario.``0 When _Customer Id_ spends _Spend_``.Text
-                    |> getCustomerIdAndSpendAmount
-                    |> getDiscountedTotal
+    scenarioOutline 
+        DiscountCalculatorFeature.Scenarios.``All of the scenarios as an outline`` {
+        return! fun scenario ->
+                
+                test scenario.Name {
+                    //Act
+                    let actual = 
+                        scenario.``0 When _Customer Id_ spends _Spend_``.Text
+                         |> getCustomerIdAndSpendAmount
+                         |> getDiscountedTotal
 
-                //Assert
-                let expected =
-                    scenario.``1 Then their total will be _Total_``.Text
-                    |> getFirstNumber
+                    //Assert
+                    let expected = 
+                        scenario.``1 Then their total will be _Total_``.Text 
+                        |> getFirstNumber
 
-                Expect.equal actual expected (sprintf "Expected %f got %f" expected actual)}
-
+                    Expect.equal actual expected (sprintf "Expected %f got %f" expected actual)
+                }
     } >>= testList
+    
